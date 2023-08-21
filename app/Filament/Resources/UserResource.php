@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
+use App\Models\Role;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Resources\Form;
@@ -17,7 +18,10 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static ?string $navigationIcon = 'heroicon-o-user-circle';
+
+    protected static ?string $navigationGroup = 'User Management';
+
 
     public static function form(Form $form): Form
     {
@@ -26,7 +30,10 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('role'),
+                Forms\Components\Select::make('role_id')
+                    ->label('Role')
+                    ->options(Role::all()->pluck('name', 'id')->toArray())
+                    ->reactive(),
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
@@ -49,7 +56,7 @@ class UserResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('role'),
+                Tables\Columns\TextColumn::make('role.name'),
                 Tables\Columns\TextColumn::make('email'),
                 // Tables\Columns\TextColumn::make('email_verified_at')
                 //     ->dateTime(),
@@ -58,6 +65,8 @@ class UserResource extends Resource
                 // Tables\Columns\TextColumn::make('created_at')
                 //     ->dateTime(),
                 // Tables\Columns\TextColumn::make('updated_at')
+                //     ->dateTime(),
+                // Tables\Columns\TextColumn::make('deleted_at')
                 //     ->dateTime(),
             ])
             ->filters([
