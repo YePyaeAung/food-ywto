@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
-use App\Models\Role;
-use App\Models\User;
+use App\Filament\Resources\MenuResource\Pages;
+use App\Filament\Resources\MenuResource\RelationManagers;
+use App\Models\Category;
+use App\Models\Menu;
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -14,16 +14,15 @@ use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class UserResource extends Resource
+class MenuResource extends Resource
 {
-    protected static ?string $model = User::class;
+    protected static ?string $model = Menu::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-user-circle';
+    protected static ?string $navigationIcon = 'heroicon-o-menu';
 
-    protected static ?string $navigationGroup = 'User Management';
+    protected static ?string $navigationGroup = 'Order Management';
 
-    protected static ?int $navigationSort = 2;
-
+    protected static ?int $navigationSort = 4;
 
     public static function form(Form $form): Form
     {
@@ -32,23 +31,14 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Select::make('role_id')
-                    ->label('Role')
-                    ->options(Role::all()->pluck('name', 'id')->toArray())
-                    ->reactive(),
-                Forms\Components\TextInput::make('email')
-                    ->email()
+                Forms\Components\Select::make('category_id')
+                    ->label('Category')
+                    ->options(Category::all()->pluck('name', 'id')->toArray())
+                    ->reactive()
+                    ->required(),
+                Forms\Components\FileUpload::make('image'),
+                Forms\Components\Textarea::make('description')
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\DateTimePicker::make('email_verified_at'),
-                Forms\Components\TextInput::make('password')
-                    ->password()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('phone')
-                    ->tel()
-                    ->maxLength(255),
-                Forms\Components\Textarea::make('address')
                     ->maxLength(65535),
             ]);
     }
@@ -58,12 +48,9 @@ class UserResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('role.name'),
-                Tables\Columns\TextColumn::make('email'),
-                // Tables\Columns\TextColumn::make('email_verified_at')
-                //     ->dateTime(),
-                Tables\Columns\TextColumn::make('phone'),
-                Tables\Columns\TextColumn::make('address'),
+                Tables\Columns\TextColumn::make('category.name'),
+                Tables\Columns\ImageColumn::make('image'),
+                Tables\Columns\TextColumn::make('description'),
                 // Tables\Columns\TextColumn::make('created_at')
                 //     ->dateTime(),
                 // Tables\Columns\TextColumn::make('updated_at')
@@ -96,10 +83,10 @@ class UserResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUsers::route('/'),
-            'create' => Pages\CreateUser::route('/create'),
-            'view' => Pages\ViewUser::route('/{record}'),
-            'edit' => Pages\EditUser::route('/{record}/edit'),
+            'index' => Pages\ListMenus::route('/'),
+            'create' => Pages\CreateMenu::route('/create'),
+            'view' => Pages\ViewMenu::route('/{record}'),
+            'edit' => Pages\EditMenu::route('/{record}/edit'),
         ];
     }    
     
