@@ -8,8 +8,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Filament\Models\Contracts\FilamentUser;
+use Illuminate\Support\Facades\Auth;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
@@ -46,6 +48,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function canAccessFilament(): bool
+    {
+        if($value = str_ends_with($this->email, '@admin.com') && $this->hasVerifiedEmail()) {
+            return $value;
+        } else {
+            Auth::logout();
+            abort(403);
+            redirect()->back();
+            return false;
+        }
+    }
 
     public function role() {
         return $this->belongsTo(Role::class);
