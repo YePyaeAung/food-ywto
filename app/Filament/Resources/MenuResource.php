@@ -36,6 +36,8 @@ class MenuResource extends Resource
                     ->options(Category::all()->pluck('name', 'id')->toArray())
                     ->reactive()
                     ->required(),
+                Forms\Components\TextInput::make('price')
+                    ->numeric(),
                 Forms\Components\FileUpload::make('image'),
                 Forms\Components\Textarea::make('description')
                     ->required()
@@ -49,6 +51,7 @@ class MenuResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name'),
                 Tables\Columns\TextColumn::make('category.name'),
+                Tables\Columns\TextColumn::make('price'),
                 Tables\Columns\ImageColumn::make('image'),
                 Tables\Columns\TextColumn::make('description'),
                 // Tables\Columns\TextColumn::make('created_at')

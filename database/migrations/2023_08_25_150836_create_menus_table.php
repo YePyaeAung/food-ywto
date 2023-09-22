@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('category_id');
+            $table->integer('price');
             $table->string('image');
             $table->text('description');
             $table->timestamps();
