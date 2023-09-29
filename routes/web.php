@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
+use App\Models\Cart;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,5 +24,7 @@ Route::post('/login', [AuthController::class, 'loginStore']);
 
 Route::get("/register", [AuthController::class, 'register'])->name('register');
 Route::post("/register", [AuthController::class, 'registerStore']);
-
 Route::post("/logout", [AuthController::class, 'logout']);
+
+Route::get('add-to-cart/{id}', [CartController::class, 'addToCart'])->name('add_to_cart');
+Route::get('carts', [CartController::class, 'index']);

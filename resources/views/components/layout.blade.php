@@ -82,6 +82,7 @@
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="Free HTML Templates" name="keywords">
         <meta content="Free HTML Templates" name="description">
+
         
         <!-- Favicon -->
         <link href="img/favicon.ico" rel="icon">
@@ -98,6 +99,8 @@
         
         <!-- Customized Bootstrap Stylesheet -->
         <link href="assets/css/style.css" rel="stylesheet">
+
+        
     </head>
     <body>
         <!-- Topbar Start -->
@@ -109,18 +112,22 @@
                     </a>
                 </div>
                 {{-- Cart Badge --}}
-                {{-- <div class="col-lg-3 col-6 text-right">
+                <div class="col-lg-3 col-6 text-right">
                     <a href="" class="btn border">
                         <i class="fas fa-heart text-primary"></i>
                         <span class="badge">0</span>
                     </a>
-                    <a href="#" class="btn border">
+                    <a href="{{ url('/carts') }}" class="btn border">
                         <i class="fas fa-shopping-cart text-primary"></i>
-                        <span class="badge" id="cart-data">5</span>
-                        <span class="badge" id="cart-data">0</span>
+                        @auth
+                            <span class="badge" id="cart-data">{{ count((array) session('cart')) }}</span>
+                        @endauth
+                        @guest
+                            <span class="badge" id="cart-data">0</span>
+                        @endguest
                         
                     </a>
-                </div> --}}
+                </div>
             </div>
         </div>
         <!-- Topbar End -->
@@ -233,6 +240,8 @@
         
         <!-- Template Javascript -->
         <script src="assets/js/main.js"></script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     </body>
     
     </html>

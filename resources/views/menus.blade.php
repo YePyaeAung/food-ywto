@@ -53,7 +53,7 @@
                                         <i class="fas fa-list-alt text-primary mr-1"></i>
                                         {{ $menu->category->name }}
                                     </p>
-                                    <a class="btn btn-sm text-dark p-0" data-toggle="modal" data-target="#cartModal">
+                                    <a href="{{ route('add_to_cart', $menu->id) }}" class="btn btn-sm text-dark p-0" data-product-id="{{$menu->id}}">
                                         <i class="fas fa-shopping-cart text-primary mr-1"></i>
                                         Add To Cart
                                     </a>
@@ -75,7 +75,7 @@
         </div>                               
         <!-- Shop End -->
         <!-- Cart Modal -->
-        <div class="modal fade" id="cartModal" role="dialog">
+        {{-- <div class="modal fade" id="cartModal" role="dialog">
             <div class="modal-dialog">
                 <!-- Modal content-->
                 <div class="modal-content">
@@ -106,6 +106,26 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <!-- Edit Modal -->
+<script>
+    $(document).ready(function() {
+        $('.add-to-cart').click(function () {
+        var productId = $(this).data('product-id');
+        var quantity = 1; // You can adjust this based on your needs
+
+        $.ajax({
+            type: 'POST',
+            url: '/add-to-cart',
+            data: {
+                product_id: productId,
+                quantity: quantity
+            },
+            success: function (data) {
+                alert(data.message);
+            }
+        });
+    });
+    })
+</script>
     </x-layout>
